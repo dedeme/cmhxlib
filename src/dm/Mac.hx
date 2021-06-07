@@ -131,7 +131,6 @@ class Mac {
   ///             public function toJs (): Js {...}
   ///
   /// EXAMPLE:
-  ///   import dm.Mac;
   ///   import dm.Js;
   ///
   ///   enum TstType {A; B;}
@@ -150,8 +149,6 @@ class Mac {
   ///
   /// NOTES:
   ///   - Only containers Array and Map<String, ?> are allowed.
-  ///   - Functions 'setFields(value)' are defined for each field. They return
-  ///             a new class with the field modified.
   ///   - To add instance functions, statics fields and statics functions
   ///             should be used 'using' importations.
   ///   - For serialization, classes other than Bool, Int, Float, String,
@@ -212,40 +209,6 @@ class Mac {
       }),
       pos: Context.currentPos()
     });
-
-    for (f in fs) {
-      final ps: Array<String> = f.split(":");
-      final name = ps[0].trim();
-      final tp = ps[1];
-      final setName = "set" + name.charAt(0).toUpperCase() +
-        name.substring(1, name.length);
-      final cl = Context.getLocalClass().toString();
-      fields.push({
-        name: setName,
-        doc: null,
-        meta: [],
-        access: [APublic],
-        kind: FFun({
-          args: [{name: "value"}],
-          expr: {
-            pos: Context.currentPos(),
-            expr: EReturn ({
-              pos: Context.currentPos(),
-              expr: ENew({
-                  pack: [],
-                  name: cl
-                },
-                fs.map(f -> {
-                  final name2 = f.split(":")[0].trim();
-                  return name2 == name ? (macro value) : (macro $i{name2});
-                })
-              )
-            })
-          }
-        }),
-        pos: Context.currentPos()
-      });
-    }
 
     if (serial) {
 
