@@ -68,6 +68,11 @@ class Dec {
     return (parts[0] + "." + parts[1]).rpad("0", parts[0].length + 1 + scale);
   }
 
+  /// Returns 'f' rounded to int
+  public static function toInt (f: Float): Int {
+    return Std.int(Math.round(f));
+  }
+
   /// Returns a standard representation of 'f' wiht 'scale' decimal, using
   /// '.' as thousand separator and ',' as decimal one.
   public static function toIso (f: Float, scale: Int): String {
