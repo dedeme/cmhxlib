@@ -5,7 +5,8 @@ package dm;
 
 import dm.Opt;
 
-///Utilities for managing dates-times.
+/// Utilities for managing dates-times.
+/// It is necessary keep in mind that precision in 'c' is of seconds.
 class Dt {
 
   static function froms (s: String, isEn: Bool): Option<Date> {
@@ -82,7 +83,7 @@ class Dt {
 
   /// Returns a new date adding 'd.getTime() + millis'.
   /// Only in javascript.
-  /// In 'interop0' use addSeconds with decimals.
+  /// In 'c' there is only precision of seconds!!!.
   public static function addMillis (d: Date, millis: Float): Date {
     return Date.fromTime(d.getTime() + millis);
   }
