@@ -211,46 +211,35 @@ class It<T> {
       fn(next(), i++);
   }
 
-  /// Runs 'fn' using the callback 'loop' for each element of 'this'. After
-  /// that runs 'go'. If some fail happends running 'fn' execute
-  /// 'fail(exception)' (if defined). For example:
+  /// Runs 'fn' with each element of 'this' synchronously and after finishing
+  /// executes 'g0'. If some fail happends execute 'fail(exception)' (if
+  /// defined). For example:
   ///
-  ///   static function cb (n: Int, svfn: (String->Void)): Void {
-  ///     haxe.Timer.delay(() -> svfn(Std.string(n)), 100);
-  ///   }
-  ///   ...
-  ///   sumTx = "";
-  ///   It.from([1,2,3]).eachSync(
-  ///     cb,
-  ///     n -> sumTx2 += n,
-  ///     () -> t.eq(sumTx2, "123"),
-  ///     (e) -> trace(e)
-  ///   );
-  ///
-  /// With a client call 'cb' could be:
-  ///   static function cb (n: Int, svfn: (Map<String, Js> -> Void)): Void {
-  ///     final rq = {"n" => Js.wi(n)};
-  ///     client.send(rq, svfn);
-  ///   }
-  public function eachSync<U> (
-    fn: (T, (U -> Void)) -> Void,
-    loop: (U) -> Void,
+  /// final is = [1, 2, 3];
+  /// var sumTx3 = "";
+  /// function cb3 (n:Int, frec: () -> Void): Void {
+  ///   haxe.Timer.delay(() -> {
+  ///     sumTx3 += "" + n;
+  ///     frec();  //NOTE: frec must be called at the end of callback.
+  ///   }, 100);
+  /// }
+  /// It.from(is).eachSyn(
+  ///   cb3,
+  ///   () -> t.eq(sumTx3, "123"),
+  ///   (e) -> t.yes(false)
+  /// );
+  public function eachSyn<U> (
+    fn: (T, (() -> Void)) -> Void,
     go: () -> Void,
     ?fail: (e:Dynamic) -> Void
   ) {
-    function frec () {
+    function frec (): Void {
       if (hasNext()) {
         if (fail == null) {
-          fn(next(), rp -> {
-            loop(rp);
-            frec();
-          });
+          fn(next(), frec);
         } else {
           try {
-            fn(next(), rp -> {
-              loop(rp);
-              frec();
-            });
+            fn(next(), frec);
           } catch (e:Dynamic) {
             fail(e);
           }

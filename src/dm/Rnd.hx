@@ -20,10 +20,11 @@ class Rnd {
 
 
   /// Returns a random Float between n1 (inclusive) and n2 (inclusive) with
-  /// 'd' : decimals. (n2 can be less than n1)
-  ///   d  : Decimal (between [0-9])
+  /// 'd' decimals.
+  /// NOTE: 'n2' can be less or greater than 'n1'.
   ///   n1 : A limit
   ///   n2 : Another limit
+  ///   d  : Decimals number (between [0-9])
   public static function f (n1: Float, n2: Float, d: Int): Float {
     return Dec.round(n1 + Math.random() * (n2 - n1), d);
   };
