@@ -68,7 +68,10 @@ class Dt {
 
   /// Returns 'd1 - d2' in days.
   public static function df (d1: Date, d2: Date): Int {
-    return Math.round(dfMillis(d1, d2) / 86400000.0);
+    return Math.round(dfMillis(
+      new Date(d1.getFullYear(), d1.getMonth(), d1.getDate(), 0, 0, 0),
+      new Date(d2.getFullYear(), d2.getMonth(), d2.getDate(), 0, 0, 0)
+    ) / 86400000.0);
   }
 
   /// Returns 'df(d1, d2) == 0' (Compare on days).
