@@ -1,0 +1,10 @@
+--class-path src
+
+--class-path /dm/dmHaxe/lib/cmhxlib/src
+
+--dce full
+--js www/index.js
+-D js-es=6
+-D js-source-map
+--main Tests
+

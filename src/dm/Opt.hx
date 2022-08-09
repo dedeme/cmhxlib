@@ -35,16 +35,19 @@ class Opt {
     }
   }
 
-  /// Returns fn(e)
-  public static function fmap<T, U> (e: T, fn: T -> Option<U>): Option<U> {
-    return fn(e);
+  /// Returns Some(fn(value)) if 'e' is Some(value) or None if 'e' is None.
+  public static function fmap<T, U> (e: Option<T>, fn: T -> U): Option<U> {
+    return switch (e) {
+      case Some(value): Some(fn(value));
+      default: None;
+    }
   }
 
-  /// Returns fn(vaule) if e is Some(value) or None if e is None.
+  /// Returns fn(value) if 'e' is Some(value) or None if 'e' is None.
   public static function bind<T, U> (
     e: Option<T>, fn: T -> Option<U>
   ): Option<U> {
-    return switch e {
+    return switch (e) {
       case Some(value): fn(value);
       default: None;
     }
